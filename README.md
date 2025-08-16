@@ -39,13 +39,20 @@ python -m streamlit run app/streamlit_app.py --server.port 8503
 
 ```mermaid
 flowchart LR
-  A["User/Client"] --> B["Retriever"]
-  B --> E["Pinecone (optional)"]
-  B --> F["BM25 / OpenSearch"]
-  E --> C["Top-K Chunks"]
-  F --> C
-  C --> D["LLM (Prompt + Context)"]
-  D --> G["Answer"]
+  UI["Streamlit UI"] --> API["API Router & Controllers"]
+  API --> RET["Retriever & Ranker"]
+  API --> SUM["Summarizer & LLM Prompts"]
+  API --> EXT["Document Extractors"]
+
+  RET <-->|"vector search"| FAISS[("FAISS")]
+  RET <-->|"vector search (namespace)"| PINE[("Pinecone (optional)")]
+  EXT -->|"extracted text/tables"| RET
+  EXT -->|"extracted text/tables"| SUM
+  RET -->|"Top-K chunks"| SUM
+  SUM -->|"completion request"| LLM["LLM Provider"]
+  LLM -->|"answer"| SUM
+  SUM -->|"JSON answer + citations"| API
+  API --> UI
 ```
 
 ## API (example)
