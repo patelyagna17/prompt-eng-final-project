@@ -1,11 +1,4 @@
-flowchart LR
-  A["User/Client"] --> B["Retriever"]
-  B --> E["Pinecone (optional)"]
-  B --> F["BM25 / OpenSearch"]
-  E --> C["Top-K Chunks"]
-  F --> C
-  C --> D["LLM (Prompt + Context)"]
-  D --> G["Answer"]
+
 # GenAI Doc Assistant
 
 [▶️ Demo Video](https://youtu.be/6-9tLGh20rI) • [📄 Report (PDF)](docs/Report.pdf) • [🌐 Project Web Page](https://patelyagna17.github.io/prompt-eng-final-project/)
@@ -50,7 +43,7 @@ flowchart LR
   API --> EXT[Document Extractors]
 
   RET <-->|vector search| FAISS[(FAISS)]
-  RET <-->|vector search (namespace)| PINE[(Pinecone (optional))]
+  RET <-->|namespaced vector search| PINE[(Pinecone)]
   EXT -->|extracted text/tables| RET
   EXT -->|extracted text/tables| SUM
   RET -->|Top-K chunks| SUM
