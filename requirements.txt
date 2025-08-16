@@ -1,0 +1,41 @@
+# --- API / server ---
+fastapi>=0.111
+uvicorn[standard]>=0.30
+pydantic>=2
+httpx>=0.27
+requests>=2.31
+python-dotenv>=1.0
+python-multipart>=0.0.7
+# --- Streamlit app ---
+streamlit>=1.40
+pandas>=2.2
+altair>=5
+
+# --- NLP / Models ---
+torch>=2.3          # required for transformers/sentence-transformers
+transformers>=4.42
+sentence-transformers>=2.6
+sentencepiece        # tokenizer dep for some HF models
+tiktoken             # optional but nice for token-safe chunking
+
+# --- Vector stores ---
+faiss-cpu>=1.8       # FAISS for local vector store
+pinecone>=5.0.0      # new SDK (not pinecone-client)
+
+# --- File parsing / OCR / video ---
+pymupdf              # PDF text extraction
+pdfplumber           # PDF table extraction (structured)
+pillow               # image loading
+pytesseract          # OCR (needs 'tesseract' binary installed)
+moviepy>=1.0.3       # video → audio
+imageio-ffmpeg       # ffmpeg bridge for moviepy
+
+# --- LangChain ---
+langchain>=0.2.12
+langchain-openai>=0.1.21
+langchain-community>=0.2.11
+langchain-huggingface>=0.1.0
+openai>=1.30
+
+# --- (nice to have) ---
+# watchdog            # speeds up Streamlit autoreload on macOS

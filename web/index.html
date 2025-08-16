@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>GenAI Doc Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- SEO -->
+  <meta name="description" content="Cited, reliable answers over your ETL/SQL/Snowflake docs with RAG, summarization, OCR, and optional Pinecone." />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="GenAI Doc Assistant" />
+  <meta property="og:description" content="Cited, reliable answers over your ETL/SQL/Snowflake docs with RAG, summarization, OCR, and optional Pinecone." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/architecture.png" />
+  <meta property="og:url" content="https://<YOUR_USERNAME>.github.io/genai-doc-assistant/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Tiny emoji favicon (inline SVG) -->
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🤖</text></svg>'>
+
+  <style>
+    :root{
+      --bg:#0f1117;
+      --card:#151923;
+      --text:#e7e7e7;
+      --muted:#a8b0bf;
+      --stroke:#232734;
+      --accent:#7C3AED;
+      --maxw: 980px;
+      --appbar-h: 56px; /* keep header height consistent */
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#ffffff; --card:#f7f7fb; --text:#0e1116; --muted:#5b6577; --stroke:#e6e8ef;
+      }
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      background:var(--bg); color:var(--text);
+      padding-top: var(--appbar-h); /* prevent initial jump with sticky header */
+    }
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:28px 18px 56px}
+
+    /* Sticky header */
+    header.hero{
+      position:fixed; inset:0 0 auto 0; height:var(--appbar-h);
+      background: linear-gradient(180deg, rgba(124,58,237,.10) 0%, rgba(124,58,237,0) 85%), var(--bg);
+      border-bottom:1px solid var(--stroke);
+      backdrop-filter:saturate(120%) blur(6px);
+      z-index: 1000;
+    }
+    .hero .in{
+      max-width:var(--maxw); height:100%;
+      margin:0 auto; padding:0 18px;
+      display:flex; gap:12px; align-items:center;
+    }
+    .brand{font-weight:800; font-size:16px; white-space:nowrap}
+    .spacer{flex:1}
+    .btn{
+      appearance:none; border:1px solid var(--stroke); background:var(--card);
+      color:var(--text); padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:600;
+      transition: filter .15s ease;
+    }
+    .btn:hover{filter:brightness(1.06)}
+    .btn.primary{ background:var(--accent); border-color:transparent; color:#fff }
+    .btn + .btn{ margin-left:8px }
+
+    h1{font-size:32px; margin:18px 0 6px}
+    p.lede{color:var(--muted); margin:0 0 14px}
+    section{
+      background:var(--card); border:1px solid var(--stroke);
+      border-radius:16px; padding:18px; margin-top:18px;
+      scroll-margin-top: calc(var(--appbar-h) + 10px); /* anchor offset */
+    }
+    h2{margin:0 0 10px; font-size:20px}
+    ul{margin:8px 0 0 20px}
+    code{background:rgba(148,163,184,.12); padding:2px 6px; border-radius:6px}
+    pre{
+      background:#0b0d13; color:#e7e7e7; border:1px solid #1f2330;
+      border-radius:12px; padding:12px; overflow:auto
+    }
+    @media (prefers-color-scheme: light){
+      pre{background:#f5f7fa; color:#101418; border-color:#e6e8ef}
+    }
+    .muted{color:var(--muted)}
+    img.diagram{max-width:100%; height:auto; border-radius:12px; border:1px solid var(--stroke)}
+    footer{color:var(--muted); text-align:center; margin:28px 0}
+  </style>
+</head>
+<body>
+
+  <!-- Sticky header -->
+  <header class="hero">
+    <div class="in">
+      <div class="brand">🤖 GenAI Doc Assistant</div>
+      <div class="spacer"></div>
+      <a class="btn" href="#quickstart">Quickstart</a>
+      <a class="btn" href="#architecture">Architecture</a>
+      <a class="btn" href="https://github.com/<YOUR_USERNAME>/genai-doc-assistant" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <h1>Technical Documentation Assistant</h1>
+    <p class="lede">Cited, reliable answers over your ETL/SQL/Snowflake docs with RAG, summarization, OCR, and optional Pinecone.</p>
+
+    <!-- Quickstart -->
+    <section id="quickstart">
+      <h2>Quickstart (local)</h2>
+      <p class="muted">Run FastAPI (backend) and Streamlit (UI) in two terminals.</p>
+      <pre><code># 1) Create & activate venv
+python -m venv .venv
+source .venv/bin/activate
+
+# 2) Install deps
+pip install -r requirements.txt
+
+# 3) Start API
+export OPENAI_API_KEY=&lt;your_key&gt;
+uvicorn app.api:app --reload --port 8000
+
+# 4) Start UI (new terminal, same venv)
+export API_BASE="http://127.0.0.1:8000"
+python -m streamlit run app/streamlit_app.py --server.port 8503
+</code></pre>
+      <p class="muted">Optional: set <code>PINECONE_API_KEY</code> + <code>PINECONE_INDEX</code> to enable Pinecone indexing &amp; retrieval.</p>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+      <h2>Features</h2>
+      <ul>
+        <li><strong>RAG:</strong> FAISS local KB + optional Pinecone namespaces.</li>
+        <li><strong>Summarization:</strong> clean prompts, bullets, optional CSV table.</li>
+        <li><strong>Extractors:</strong> PyMuPDF/pdfplumber for PDFs &amp; tables, Tesseract OCR (images, scanned PDFs), Whisper for video audio.</li>
+        <li><strong>UX niceties:</strong> sticky Pinecone namespace, source citations, photo summary tab.</li>
+        <li><strong>Quality:</strong> RAGAS eval, synthetic data helpers, tests.</li>
+      </ul>
+    </section>
+
+    <!-- Architecture -->
+    <section id="architecture">
+      <h2>System Architecture</h2>
+      <p class="muted">Streamlit UI → FastAPI → Extractors/Retriever → FAISS/Pinecone → LLM</p>
+      <picture>
+        <!-- If you have SVG, add a source above the PNG -->
+        <!-- <source srcset="assets/architecture.svg" type="image/svg+xml"> -->
+        <img class="diagram" src="assets/architecture.png" alt="GenAI Doc Assistant architecture diagram">
+      </picture>
+    </section>
+
+    <!-- API -->
+    <section id="api">
+      <h2>Key API Endpoints</h2>
+      <pre><code>GET  /health
+GET  /config
+POST /ingest                          # rebuild FAISS KB from data/raw
+POST /ask            {"question": "...", "k": 5}
+POST /upsert_pinecone {"texts": [...], "ids": [...], "namespace":"demo"}
+POST /ask_pinecone   {"question":"...", "top_k":8, "namespace":"demo"}
+POST /summarize      {"text":"...", "max_words":250}
+POST /describe_image (multipart: file + prompt)</code></pre>
+    </section>
+
+    <!-- Links -->
+    <section id="links">
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://github.com/<YOUR_USERNAME>/genai-doc-assistant" target="_blank" rel="noopener">GitHub repo</a></li>
+        <li><a href="docs/REPORT.pdf" target="_blank" rel="noopener">Project Report (PDF)</a></li>
+        <li><a href="#quickstart">Quickstart</a> · <a href="#architecture">Architecture</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      Built with Streamlit · FastAPI · PyMuPDF · pdfplumber · Tesseract · FAISS/Pinecone
+    </footer>
+  </div>
+</body>
+</html>
