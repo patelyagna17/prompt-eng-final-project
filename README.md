@@ -8,7 +8,12 @@ flowchart LR
   D --> G["Answer"]
 # GenAI Doc Assistant
 
-A simple, GitHub-safe README for a RAG + multimodal documentation assistant. This file avoids advanced Markdown features that commonly break rendering and includes a valid Mermaid diagram.
+[▶️ Demo Video](https://youtu.be/6-9tLGh20rI) • [📄 Report (PDF)](docs/Report.pdf) • [🌐 Project Web Page](https://patelyagna17.github.io/prompt-eng-final-project/)
+
+<!-- Optional: clickable thumbnail -->
+[![Watch the demo](https://img.youtube.com/vi/6-9tLGh20rI/hqdefault.jpg)](https://youtu.be/6-9tLGh20rI)
+
+GenAI Doc Assistant is a retrieval-augmented generation (RAG) system for answering questions about user documents (PDFs/images) with citations. A Streamlit UI interacts with a FastAPI backend that handles ingestion, hybrid retrieval (FAISS local, optional Pinecone/BM25), prompt assembly, and OCR for scanned content. The design emphasizes faithfulness, reasonable latency, and graceful handling of uncertainty.
 
 ## Overview
 - Ask natural-language questions over your docs with cited answers
@@ -18,10 +23,10 @@ A simple, GitHub-safe README for a RAG + multimodal documentation assistant. Thi
 ## Quickstart
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install --upgrade pip
 pip install -r requirements.txt
-cp .env.example .env
+cp .env.example .env               # fill keys if using cloud LLM/Pinecone
 # fill keys in .env if needed
 ```
 
@@ -39,19 +44,19 @@ python -m streamlit run app/streamlit_app.py --server.port 8503
 
 ```mermaid
 flowchart LR
-  UI["Streamlit UI"] --> API["API Router & Controllers"]
-  API --> RET["Retriever & Ranker"]
-  API --> SUM["Summarizer & LLM Prompts"]
-  API --> EXT["Document Extractors"]
+  UI[Streamlit UI] --> API[API Router & Controllers]
+  API --> RET[Retriever & Ranker]
+  API --> SUM[Summarizer & LLM Prompts]
+  API --> EXT[Document Extractors]
 
-  RET <-->|"vector search"| FAISS[("FAISS")]
-  RET <-->|"vector search (namespace)"| PINE[("Pinecone (optional)")]
-  EXT -->|"extracted text/tables"| RET
-  EXT -->|"extracted text/tables"| SUM
-  RET -->|"Top-K chunks"| SUM
-  SUM -->|"completion request"| LLM["LLM Provider"]
-  LLM -->|"answer"| SUM
-  SUM -->|"JSON answer + citations"| API
+  RET <-->|vector search| FAISS[(FAISS)]
+  RET <-->|vector search (namespace)| PINE[(Pinecone (optional))]
+  EXT -->|extracted text/tables| RET
+  EXT -->|extracted text/tables| SUM
+  RET -->|Top-K chunks| SUM
+  SUM -->|completion request| LLM[LLM Provider]
+  LLM -->|answer| SUM
+  SUM -->|JSON answer + citations| API
   API --> UI
 ```
 

@@ -13,7 +13,7 @@
   <meta property="og:description" content="Cited, reliable answers over your ETL/SQL/Snowflake docs with RAG, summarization, OCR, and optional Pinecone." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/architecture.png" />
-  <meta property="og:url" content="https://<YOUR_USERNAME>.github.io/genai-doc-assistant/" />
+  <meta property="og:url" content="https://patelyagna17.github.io/prompt-eng-final-project/" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Tiny emoji favicon (inline SVG) -->
@@ -21,74 +21,48 @@
 
   <style>
     :root{
-      --bg:#0f1117;
-      --card:#151923;
-      --text:#e7e7e7;
-      --muted:#a8b0bf;
-      --stroke:#232734;
-      --accent:#7C3AED;
-      --maxw: 980px;
-      --appbar-h: 56px; /* keep header height consistent */
+      --bg:#0f1117; --card:#151923; --text:#e7e7e7; --muted:#a8b0bf;
+      --stroke:#232734; --accent:#7C3AED; --maxw: 980px; --appbar-h: 56px;
     }
     @media (prefers-color-scheme: light){
-      :root{
-        --bg:#ffffff; --card:#f7f7fb; --text:#0e1116; --muted:#5b6577; --stroke:#e6e8ef;
-      }
+      :root{ --bg:#ffffff; --card:#f7f7fb; --text:#0e1116; --muted:#5b6577; --stroke:#e6e8ef; }
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-      background:var(--bg); color:var(--text);
-      padding-top: var(--appbar-h); /* prevent initial jump with sticky header */
-    }
+    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+          background:var(--bg); color:var(--text); padding-top:var(--appbar-h); }
     .wrap{max-width:var(--maxw); margin:0 auto; padding:28px 18px 56px}
 
     /* Sticky header */
-    header.hero{
-      position:fixed; inset:0 0 auto 0; height:var(--appbar-h);
-      background: linear-gradient(180deg, rgba(124,58,237,.10) 0%, rgba(124,58,237,0) 85%), var(--bg);
-      border-bottom:1px solid var(--stroke);
-      backdrop-filter:saturate(120%) blur(6px);
-      z-index: 1000;
-    }
-    .hero .in{
-      max-width:var(--maxw); height:100%;
-      margin:0 auto; padding:0 18px;
-      display:flex; gap:12px; align-items:center;
-    }
+    header.hero{ position:fixed; inset:0 0 auto 0; height:var(--appbar-h);
+      background:linear-gradient(180deg, rgba(124,58,237,.10) 0%, rgba(124,58,237,0) 85%), var(--bg);
+      border-bottom:1px solid var(--stroke); backdrop-filter:saturate(120%) blur(6px); z-index:1000; }
+    .hero .in{ max-width:var(--maxw); height:100%; margin:0 auto; padding:0 18px;
+      display:flex; gap:12px; align-items:center; }
     .brand{font-weight:800; font-size:16px; white-space:nowrap}
     .spacer{flex:1}
-    .btn{
-      appearance:none; border:1px solid var(--stroke); background:var(--card);
-      color:var(--text); padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:600;
-      transition: filter .15s ease;
-    }
+    .btn{ appearance:none; border:1px solid var(--stroke); background:var(--card); color:var(--text);
+      padding:8px 12px; border-radius:10px; text-decoration:none; font-weight:600; transition:filter .15s ease; }
     .btn:hover{filter:brightness(1.06)}
     .btn.primary{ background:var(--accent); border-color:transparent; color:#fff }
     .btn + .btn{ margin-left:8px }
 
     h1{font-size:32px; margin:18px 0 6px}
     p.lede{color:var(--muted); margin:0 0 14px}
-    section{
-      background:var(--card); border:1px solid var(--stroke);
-      border-radius:16px; padding:18px; margin-top:18px;
-      scroll-margin-top: calc(var(--appbar-h) + 10px); /* anchor offset */
-    }
+    section{ background:var(--card); border:1px solid var(--stroke); border-radius:16px;
+      padding:18px; margin-top:18px; scroll-margin-top: calc(var(--appbar-h) + 10px); }
     h2{margin:0 0 10px; font-size:20px}
     ul{margin:8px 0 0 20px}
     code{background:rgba(148,163,184,.12); padding:2px 6px; border-radius:6px}
-    pre{
-      background:#0b0d13; color:#e7e7e7; border:1px solid #1f2330;
-      border-radius:12px; padding:12px; overflow:auto
-    }
+    pre{ background:#0b0d13; color:#e7e7e7; border:1px solid #1f2330; border-radius:12px; padding:12px; overflow:auto }
     @media (prefers-color-scheme: light){
       pre{background:#f5f7fa; color:#101418; border-color:#e6e8ef}
     }
     .muted{color:var(--muted)}
     img.diagram{max-width:100%; height:auto; border-radius:12px; border:1px solid var(--stroke)}
     footer{color:var(--muted); text-align:center; margin:28px 0}
+    .video{position:relative; padding-top:56.25%; border-radius:12px; overflow:hidden; border:1px solid var(--stroke)}
+    .video iframe{ position:absolute; top:0; left:0; width:100%; height:100%; border:0 }
   </style>
 </head>
 <body>
@@ -100,7 +74,9 @@
       <div class="spacer"></div>
       <a class="btn" href="#quickstart">Quickstart</a>
       <a class="btn" href="#architecture">Architecture</a>
-      <a class="btn" href="https://github.com/<YOUR_USERNAME>/genai-doc-assistant" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="#demo">Demo</a>
+      <a class="btn" href="https://github.com/patelyagna17/prompt-eng-final-project" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn primary" href="Report.pdf" target="_blank" rel="noopener">Report (PDF)</a>
     </div>
   </header>
 
@@ -135,11 +111,25 @@ python -m streamlit run app/streamlit_app.py --server.port 8503
       <h2>Features</h2>
       <ul>
         <li><strong>RAG:</strong> FAISS local KB + optional Pinecone namespaces.</li>
-        <li><strong>Summarization:</strong> clean prompts, bullets, optional CSV table.</li>
-        <li><strong>Extractors:</strong> PyMuPDF/pdfplumber for PDFs &amp; tables, Tesseract OCR (images, scanned PDFs), Whisper for video audio.</li>
-        <li><strong>UX niceties:</strong> sticky Pinecone namespace, source citations, photo summary tab.</li>
-        <li><strong>Quality:</strong> RAGAS eval, synthetic data helpers, tests.</li>
+        <li><strong>Summarization:</strong> prompt-engineered bullets; optional CSV table.</li>
+        <li><strong>Extractors:</strong> PyMuPDF/pdfplumber for PDFs &amp; tables, Tesseract OCR (images, scanned PDFs).</li>
+        <li><strong>UX niceties:</strong> namespace toggle, source citations, image/scan support.</li>
+        <li><strong>Quality:</strong> RAGAS eval, basic tests, small sample corpus.</li>
       </ul>
+    </section>
+
+    <!-- Demo -->
+    <section id="demo">
+      <h2>Demo (10 min)</h2>
+      <div class="video">
+        <iframe
+          src="https://www.youtube.com/embed/6-9tLGh20rI"
+          title="GenAI Doc Assistant — 10-Minute Demo"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="muted">If the embed doesn’t load on your network, <a href="https://youtu.be/6-9tLGh20rI" target="_blank" rel="noopener">open the video on YouTube</a>.</p>
     </section>
 
     <!-- Architecture -->
@@ -147,8 +137,6 @@ python -m streamlit run app/streamlit_app.py --server.port 8503
       <h2>System Architecture</h2>
       <p class="muted">Streamlit UI → FastAPI → Extractors/Retriever → FAISS/Pinecone → LLM</p>
       <picture>
-        <!-- If you have SVG, add a source above the PNG -->
-        <!-- <source srcset="assets/architecture.svg" type="image/svg+xml"> -->
         <img class="diagram" src="assets/architecture.png" alt="GenAI Doc Assistant architecture diagram">
       </picture>
     </section>
@@ -162,22 +150,21 @@ POST /ingest                          # rebuild FAISS KB from data/raw
 POST /ask            {"question": "...", "k": 5}
 POST /upsert_pinecone {"texts": [...], "ids": [...], "namespace":"demo"}
 POST /ask_pinecone   {"question":"...", "top_k":8, "namespace":"demo"}
-POST /summarize      {"text":"...", "max_words":250}
-POST /describe_image (multipart: file + prompt)</code></pre>
+POST /summarize      {"text":"...", "max_words":250}</code></pre>
     </section>
 
     <!-- Links -->
     <section id="links">
       <h2>Links</h2>
       <ul>
-        <li><a href="https://github.com/<YOUR_USERNAME>/genai-doc-assistant" target="_blank" rel="noopener">GitHub repo</a></li>
-        <li><a href="docs/REPORT.pdf" target="_blank" rel="noopener">Project Report (PDF)</a></li>
-        <li><a href="#quickstart">Quickstart</a> · <a href="#architecture">Architecture</a></li>
+        <li><a href="https://github.com/patelyagna17/prompt-eng-final-project" target="_blank" rel="noopener">GitHub repository</a></li>
+        <li><a href="Report.pdf" target="_blank" rel="noopener">Project Report (PDF)</a></li>
+        <li><a href="#quickstart">Quickstart</a> · <a href="#architecture">Architecture</a> · <a href="#demo">Demo</a></li>
       </ul>
     </section>
 
     <footer>
-      Built with Streamlit · FastAPI · PyMuPDF · pdfplumber · Tesseract · FAISS/Pinecone
+      © 2025 Yagna Patel — Built with Streamlit · FastAPI · PyMuPDF · pdfplumber · Tesseract · FAISS/Pinecone
     </footer>
   </div>
 </body>

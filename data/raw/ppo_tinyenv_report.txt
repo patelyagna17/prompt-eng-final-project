@@ -1,0 +1,122 @@
+TinyEnv + PPOController: A Minimal Agentic RL Study
+Author: Yagna Patel
+Date: August 12, 2025
+Abstract
+This report investigates a compact reinforcement learning setup comprising a tiny, research-oriented
+environment ('TinyEnv') and a PPO-based controller ('PPOController'). The environment emits a 9-feature
+state vector, including a controllable research ratio as the 9th feature. The controller uses clipped Proximal
+Policy Optimization (PPO) with Generalized Advantage Estimation (GAE), entropy regularization, and a
+KL-guard for stability. We document the system architecture, formalize the RL problem, provide algorithmic
+details, and present an experimental protocol covering seeds, episode budgets, hyperparameters, and a
+flip-episode strategy to improve coverage. Results illustrate a placeholder learning curve, greedy evaluation
+metrics, action usage statistics, and example rollouts. We include ablations on the 9th feature, entropy
+schedules, and the flip-ep strategy. Finally, we discuss stability, failure modes, ethical use, and fully
+reproducible steps.
+System Architecture
+Figure 1 shows the high-level dataflow between TinyEnv, the PPOController, and the training/evaluation
+loops. The controller samples actions from a stochastic policy; the environment returns next state and
+reward; the training loop collects trajectories and updates policy/value networks; and a greedy evaluator
+estimates deploy-time performance without exploration noise.
+Figure 1. System architecture with TinyEnv, PPOController, training loop, and evaluator.
+RL Formulation
+
+State (s ∈ II): A 9-dimensional feature vector including task type indicators, budget/step counters, and the
+9th feature research ratio ∈ [0, 1] controlling exploration vs. consolidation tendencies.
+Action space (A): Discrete set of K atomic research actions (e.g., 'search', 'summarize', 'reflect', etc.).
+Transition dynamics: Deterministic plus structured stochasticity to model variability in query difficulty.
+Reward shaping: Dense rewards for useful progress (signal quality, coverage, citation adherence), with
+sparse bonuses at completion; small step penalty discourages dithering.
+Episodes/termination: Horizon H with early stop on success/failure; reset mixes task regimes to avoid
+overfitting.
+Algorithm: PPO Details
+Policy/value networks: Two-headed MLP sharing a trunk; policy head outputs logits over K actions; value
+head predicts V(s).
+GAE(λ): Advantages computed over trajectories to reduce variance while retaining bias/variance tradeoff.
+Clipping: Ratio clip ε prevents destructive policy updates: Lclip = E[min(rA, clip(r,1±ε)A)].
+Entropy bonus: Encourages exploration; can be annealed or scheduled to stabilize late training.
+KL guard: Optional early-stop or penalty when empirical KL exceeds a threshold to prevent policy collapse.
+Optimization: Multiple epochs over shuffled minibatches; Adam optimizer with tuned LR; gradient clipping.
+Experimental Setup
+Seeds: ≥3 random seeds for mean/±std reporting.
+Episodes: Default 800 (can extend to 2k for final curves).
+Hyperparameters: Learning rate ∈ {1e−4, 3e−4, 1e−3}; entropy coef ∈ {0.01, 0.03, 0.05, 0.1}; clip ε = 0.2;
+GAE λ = 0.95; γ = 0.99; batch size tuned to environment step cost.
+Flip-episode (flipIep) strategy: Every N episodes, invert the regime mix (e.g., harder queries or inverted
+task priors) while re-seeding to improve coverage and reduce regime overfitting.
+Evaluation: Greedy (argmax) policy rollouts every M episodes; report success rate, mean return, and
+episode length.
+Results
+Learning Curve
+
+Greedy Success (Placeholder)
+Checkpoint (ep)
+Success %
+Mean Return
+Mean Len
+100
+18.4
+8.1
+42.6
+300
+41.2
+18.7
+39.3
+500
+62.9
+28.5
+36.4
+800
+74.3
+33.0
+34.7
+Action Usage Histogram
+
+Example Rollouts
+Ablations
+9th Feature (Research Ratio): Compare fixed values (0.2, 0.5, 0.8) and a curriculum schedule (warmIup
+at 0.6 → anneal to 0.3). Hypothesis: moderate ratio improves early exploration; annealing yields better late
+precision.
+Entropy Schedule: Constant vs. cosine anneal vs. stepIdown. Hypothesis: anneal reduces late
+stochasticity without hurting coverage.
+FlipIep Strategy: On vs. off. Hypothesis: improves robustness across task regimes and reduces variance
+across seeds.
+Ablation
+Setting
+Metric(s)
+Observation (fill in)
+9th feature
+fixed 0.5 vs. anneal 0.6→0.3
+Final success %, AUC —
+Entropy
+const 0.03 vs. cosine
+AUC, stab.
+—
+FlipIep
+enabled vs. disabled
+Mean±std return
+—
+Discussion: Stability, Failures, Limitations
+Even in a tiny setting, PPO can exhibit sensitivity to entropy and batch size. FlipIep reduces regime
+overfitting but may slow early gains. Common failure modes include premature entropy collapse, oscillatory
+updates when KL guard is too loose, and reward hacking if shaping terms dominate sparse goals.
+Limitations include the abstraction gap between TinyEnv and real research workflows, and the simplified
+reward proxies (citation/coverage signals). Future work: curriculum on regime difficulty, auxiliary predictive
+heads for stability, and offline pretraining.
+Ethics: Responsible Use, Hallucination/Citation Handling
+
+This prototype must respect citation fidelity and avoid fabricating claims. Training rewards should privilege
+verifiable sources and explicit citations over speed alone. Evaluation should include hallucination audits and
+penalty terms for unverifiable content. Logs must preserve attribution for downstream review, and models
+should abstain on insufficient evidence, surfacing uncertainty transparently.
+Repro Steps: Exact Commands (Template)
+# Assuming your repo layout exposes train_ppo.py and honors env vars: # Sweep over
+entropy and learning rate (edit EPISODES as needed) export ENT_LIST="0.01 0.03
+0.05 0.1" export LR_LIST="1e-4 3e-4 1e-3" export EPISODES=800 for ENT in
+$ENT_LIST; do for LR in $LR_LIST; do RUN="runs/sweep_ent${ENT}_lr${LR}" mkdir -p
+"$RUN" PROJECT_ROOT="$RUN" LR="$LR" ENT_COEF="$ENT" EPISODES="$EPISODES" \ python
+train_ppo.py --flip-ep --seeds 3 --eval-interval 50 done done # Single best run
+(replace with your chosen hyperparams) PROJECT_ROOT="runs/best_ent0.03_lr3e-4"
+LR="3e-4" ENT_COEF="0.03" EPISODES="1200" \ python train_ppo.py --flip-ep --seeds
+5 --eval-interval 25
+Note: All plots and tables in the Results section are placeholders. Replace with your actual logs/figures from
+runs using the commands above.
