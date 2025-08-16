@@ -11,7 +11,7 @@ header-includes:
     \newunicodechar{≥}{{\FallbackSymbols ≥}}
     \newunicodechar{❤}{{\Emoji ❤}}
     \newunicodechar{️}{} % strip VS16
-    
+
 title: "GenAI Doc Assistant"
 subtitle: "RAG + Multimodal Technical Documentation Assistant"
 author: "Yagna Patel"
@@ -61,13 +61,13 @@ colorlinks: true
 
 ```mermaid
 flowchart LR
-  A[Streamlit UI] -- REST --> B[FastAPI app]
-  B --> C[Summarizer & LLM Prompts]
-  B --> D[FAISS Vector DB]
+  A[User/Client] --> B[Retriever]
   B --> E[Pinecone (optional)]
-  B --> F[PDF/Image/Video Extractors\nPyMuPDF/pdfplumber/Tesseract/Whisper]
-  D & E --> G[Retriever/Ranker]
-  G --> C
+  B --> F[BM25 / OpenSearch]
+  E --> C[Top-K Chunks]
+  F --> C
+  C --> D[LLM (Prompt + Context)]
+  D --> G[Answer]
 ```
 
 > Image fallback (optional): place a diagram at `docs/assets/architecture.png` and reference it with:
